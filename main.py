@@ -12,6 +12,9 @@ def main():
     pygame.display.set_caption("Asteroids")
     clock = pygame.time.Clock()
     dt = 0
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable)
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
 
@@ -22,12 +25,13 @@ def main():
                 return
         log_state()
         screen.fill("black")
+        updatable.update(dt)
 
-        # draw player
-        player.draw(screen)
-        # update player
-        player.update(dt)
+        # Loop over all "drawables" and .draw() them individually.
+        for obj in drawable:
+            obj.draw(screen)
 
+        # present the frame
         pygame.display.flip()
 
         # limit to 60 FPS
